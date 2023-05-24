@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+set -o errexit
+set -o nounset
+set -o noclobber
+set -o pipefail
+
 export PYTHONNOUSERSITE=1
 
 if [[ $1 = "cuda" || $1 = "CUDA" ]]; then
@@ -18,4 +23,5 @@ if [[ $1 = "rocm" || $1 = "ROCM" ]]; then
   exit
 fi
 
-echo 'Please specify either CUDA or ROCM.'
+echo 'Please specify either cuda/CUDA, or rocm/ROCM as the first argument.'
+exit 1
