@@ -1,9 +1,43 @@
-FROM debian
-RUN apt update && apt install wget aria2 git bzip2 -y
-RUN git clone --recursive https://github.com/henk717/koboldai /opt/koboldai
-WORKDIR /opt/koboldai
-RUN ./install_requirements.sh cuda
-COPY docker-helper.sh /opt/koboldai/docker-helper.sh
-RUN chmod +x /opt/koboldai/docker-helper.sh
+FROM debian:10
+
 EXPOSE 5000/tcp
+
+ENV \
+    # https://github.com/mamba-org/boa-forge/releases
+    MICROMAMBA_VERSION=1.0.0
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+        wget \
+        aria2 \
+        git \
+        bzip2 \
+    && \
+    # Cleaning up:
+    apt-get purge --yes --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN \
+    # Downloading cloudflared-linux-amd64 because Cloudflare once failed to upload the latest version yet the package
+    # manifest was there:
+    wget \
+      --no-check-certificate \
+      https://github.com/cloudflare/cloudflared/releases/download/2023.5.0/cloudflared-linux-amd64 \
+      --directory-prefix /tmp/cloudflared-linux-amd64 && \
+    chmod +x /tmp/cloudflared-linux-amd64
+
+WORKDIR /opt/koboldai
+
+RUN \
+    # https://mamba.readthedocs.io/en/latest/installation.html#linux-and-macos
+    wget \
+      --no-check-certificate \
+      --compression=none \
+      -O- https://micromamba.snakepit.net/api/micromamba/linux-64/${MICROMAMBA_VERSION} | \
+        tar -xvj bin/micromamba
+
+COPY ./docker-standalone/docker-helper.sh ./
+RUN chmod +x ./docker-helper.sh
 CMD /opt/koboldai/docker-helper.sh
+
+COPY . ./
