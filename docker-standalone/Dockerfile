@@ -37,8 +37,13 @@ RUN \
       -O- https://micromamba.snakepit.net/api/micromamba/linux-64/${MICROMAMBA_VERSION} | \
         tar -xvj bin/micromamba
 
+COPY ./install_requirements.sh ./
+RUN chmod +x ./install_requirements.sh && \
+    ./install_requirements.sh
+
 COPY ./docker-standalone/docker-helper.sh ./
 RUN chmod +x ./docker-helper.sh
+
 CMD /opt/koboldai/docker-helper.sh
 
 COPY . ./
