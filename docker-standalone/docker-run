@@ -42,13 +42,3 @@ docker run \
   "${koboldai_image_name}:${koboldai_image_tag}" \
   "$@"
 echo "[INFO] Launched ${koboldai_container_name} Docker container in detached mode."
-
-koboldai_container_id=$(docker ps --quiet --filter="name=${koboldai_container_name}")
-koboldai_container_log_path=$(docker inspect --format='{{ .LogPath }}' "${koboldai_container_id}")
-koboldai_endpoint=$(
-  sudo sed -n 's|.*KoboldAI has finished loading and is available at the following link for UI 1: \([^\\]*\).*|\1|p' \
-    "${koboldai_container_log_path}" | \
-  head -n 1
-)
-echo "[INFO] ${koboldai_container_name} entrypoint: ${koboldai_endpoint}"
-echo "${koboldai_endpoint}"
