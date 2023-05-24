@@ -15,7 +15,7 @@ working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
 # TODO: extract from the build and run scripts
 koboldai_image_name='implyai/koboldai'
-koboldai_image_tag="$(git rev-parse HEAD)"
+#koboldai_image_tag="$(git rev-parse HEAD)"
 
 koboldai_data_local_dir_name='koboldai-data'
 echo "[INFO] Creating the ${koboldai_data_local_dir_name} directory, if it doesn't  exist already..."
@@ -39,6 +39,6 @@ docker run \
   --volume "${working_dir_path}/${koboldai_data_local_dir_name}:${KOBOLDAI_DATADIR}" \
   --volume "${working_dir_path}/${koboldai_models_local_dir_name}:${KOBOLDAI_MODELDIR}" \
   --publish 5000:5000 \
-  "${koboldai_image_name}:${koboldai_image_tag}" \
+  "${koboldai_image_name}:latest" \
   "$@"
 echo "[INFO] Launched ${koboldai_container_name} Docker container in detached mode."
