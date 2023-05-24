@@ -1,14 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# TODO: set the below, unless they will break the existing code?
+#set -o errexit
+#set -o nounset
+
 cd /opt/koboldai
 
-if [[ -n update ]];then
-        git pull --recurse-submodules && ./install_requirements.sh cuda
-	git submodule update --init --recursive
+if [[ -n update ]]; then
+  ./install_requirements.sh cuda
 fi
 
-if [[ ! -v KOBOLDAI_DATADIR ]];then
-	mkdir /content
-	KOBOLDAI_DATADIR=/content
+if [[ ! -v KOBOLDAI_DATADIR ]]; then
+  mkdir /content
+  KOBOLDAI_DATADIR=/content
 fi
 
 mkdir $KOBOLDAI_DATADIR/stories
@@ -24,21 +28,20 @@ cp -rn softprompts/* $KOBOLDAI_DATADIR/softprompts/
 cp -rn presets/* $KOBOLDAI_DATADIR/presets/
 cp -rn themes/* $KOBOLDAI_DATADIR/themes/
 
-if [[ -v KOBOLDAI_MODELDIR ]];then
-	mkdir $KOBOLDAI_MODELDIR/models
-	mkdir $KOBOLDAI_MODELDIR/functional_models
-	rm models
-	rm -rf models/
-	ln -s $KOBOLDAI_MODELDIR/models/ models
-	ln -s $KOBOLDAI_MODELDIR/functional_models/ functional_models
+if [[ -v KOBOLDAI_MODELDIR ]]; then
+  mkdir $KOBOLDAI_MODELDIR/models
+  mkdir $KOBOLDAI_MODELDIR/functional_models
+  rm models
+  rm -rf models/
+  ln -s $KOBOLDAI_MODELDIR/models/ models
+  ln -s $KOBOLDAI_MODELDIR/functional_models/ functional_models
 fi
 
-for FILE in $KOBOLDAI_DATADIR*
-do
-    FILENAME="$(basename $FILE)"
-	rm /opt/koboldai/$FILENAME
-	rm -rf /opt/koboldai/$FILENAME
-	ln -s $FILE /opt/koboldai/
+for FILE in $KOBOLDAI_DATADIR*; do
+  FILENAME="$(basename $FILE)"
+  rm /opt/koboldai/$FILENAME
+  rm -rf /opt/koboldai/$FILENAME
+  ln -s $FILE /opt/koboldai/
 done
 
-PYTHONUNBUFFERED=1 ./play.sh --remote --quiet --override_delete --override_rename
+PYTHONUNBUFFERED=1 ./play.sh --remote --quiet --override_delete --override_rename --model ${LLM_MODEL} "$@"
