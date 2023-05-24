@@ -9,7 +9,7 @@ set -o pipefail
 #       when running in Swarm mode.
 
 llm_model_uid="${1}"
-koboldai_container_name="${2:-koboldai}"
+shift
 
 working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
@@ -25,6 +25,7 @@ koboldai_models_local_dir_name='koboldai-models'
 echo "[INFO] Creating the ${koboldai_models_local_dir_name} directory, if it doesn't  exist already..."
 mkdir -p "${working_dir_path}/${koboldai_models_local_dir_name}"
 
+koboldai_container_name='koboldai'
 echo "[INFO] Starting ${koboldai_container_name} Docker container in detached mode..."
 export KOBOLDAI_DATADIR='/content'
 export KOBOLDAI_MODELDIR='/models'
