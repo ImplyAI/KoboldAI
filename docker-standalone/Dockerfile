@@ -12,6 +12,7 @@ RUN apt-get update && \
         aria2 \
         git \
         bzip2 \
+        ca-certificates \
     && \
     # Cleaning up:
     apt-get purge --yes --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
