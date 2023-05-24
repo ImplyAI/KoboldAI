@@ -42,9 +42,7 @@ COPY ./environments/ ./environments/
 RUN chmod +x ./install_requirements.sh && \
     ./install_requirements.sh cuda
 
-COPY ./docker-standalone/docker-helper.sh ./docker-standalone/
-RUN chmod +x ./docker-standalone/docker-helper.sh
-
-CMD /opt/koboldai/docker-helper.sh
-
 COPY . ./
+
+RUN chmod +x ./docker-standalone/docker-helper.sh
+CMD /opt/koboldai/docker-standalone/docker-helper.sh
