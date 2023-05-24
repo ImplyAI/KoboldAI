@@ -12,9 +12,6 @@ working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
 cd "${working_dir_path}/.."
 
-git pull --recurse-submodules
-git submodule update --init --recursive
-
 docker build \
   --file "./docker-standalone/Dockerfile" \
   --tag "${koboldai_image_name}:${koboldai_image_tag}" \
