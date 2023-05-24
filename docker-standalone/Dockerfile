@@ -24,7 +24,7 @@ RUN \
     wget \
       --no-check-certificate \
       https://github.com/cloudflare/cloudflared/releases/download/2023.5.0/cloudflared-linux-amd64 \
-      --directory-prefix /tmp/cloudflared-linux-amd64 && \
+      --directory-prefix /tmp && \
     chmod +x /tmp/cloudflared-linux-amd64
 
 WORKDIR /opt/koboldai
