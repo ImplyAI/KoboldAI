@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o noclobber
+set -o pipefail
+
+koboldai_image_name='implyai/koboldai'
+koboldai_image_tag="$(git rev-parse HEAD)"
+
+working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
+
+cd "${working_dir_path}/.."
+
+git pull --recurse-submodules
+git submodule update --init --recursive
+
+docker build \
+  --file "./docker-standalone/Dockerfile" \
+  --tag "${koboldai_image_name}:${koboldai_image_tag}" \
+  --tag "${koboldai_image_name}:latest" \
+  .
