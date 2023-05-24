@@ -1,0 +1,62 @@
+# Ignore client settings file
+settings
+
+# Ignore stories file except for test_story
+stories
+!stories/sample_story.json
+
+# Ignore stuff that would polute our Git
+/.project
+*.bak
+miniconda3
+runtime
+bin
+*.settings
+__pycache__
+*.log
+cache
+accelerate-disk-cache
+userscripts
+!userscripts/examples
+!userscripts/kaipreset_*.lua
+!userscripts/Readme.*
+!userscripts/api_documentation.*
+softprompts
+models
+functional_models
+!models/models go here.txt
+Uninstall
+flask_session
+accelerate-disk-cache
+.ipynb_checkpoints
+unit_test_report.html
+
+# Temporary until HF port
+!models/RWKV-v4
+models/RWKV-v4/20B_tokenizer.json
+models/RWKV-v4/src/__pycache__
+models/RWKV-v4/models
+
+# Ignore PyCharm, VSCode project files.
+.idea
+.vscode
+
+# Ignore compiled Python files.
+*.pyc
+
+# Don't ignore defaults
+!defaults/*
+flask_session/1074228e7055acfb7de9d07a471d0b92
+.gitignore
+flask_session/2029240f6d1128be89ddc32729463129
+flask_session
+
+# virtualenvs
+.venv
+
+### Project
+.git/
+
+.idea/
+
+.dockerignore
