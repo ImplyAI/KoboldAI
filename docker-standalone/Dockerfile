@@ -3,8 +3,8 @@ FROM debian:10
 EXPOSE 5000/tcp
 
 ENV \
-    # https://github.com/mamba-org/boa-forge/releases
-    MICROMAMBA_VERSION=1.0.0
+    # https://api.anaconda.org/release/conda-forge/micromamba/latest
+    MICROMAMBA_VERSION=1.4.3
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
