@@ -8,7 +8,7 @@ set -o pipefail
 # NOTE: Running the container directly and not through Docker Compose, because Docker Compose only supports `--gpus all`
 #       when running in Swarm mode.
 
-llm_model="${1}"
+llm_model_uid="${1}"
 koboldai_container_name="${2:-koboldai}"
 
 working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
@@ -30,7 +30,7 @@ docker run \
   --gpus all \
   --env KOBOLDAI_DATADIR \
   --env KOBOLDAI_MODELDIR \
-  --env LLM_MODEL="${llm_model}" \
+  --env LLM_MODEL_UID="${llm_model_uid}" \
   --volume "$(pwd)/${koboldai_data_local_dir_name}:${KOBOLDAI_DATADIR}" \
   "${koboldai_image_name}:${koboldai_image_tag}" \
   "$@"

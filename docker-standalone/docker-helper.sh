@@ -44,4 +44,4 @@ for FILE in $KOBOLDAI_DATADIR*; do
   ln -s $FILE /opt/koboldai/
 done
 
-PYTHONUNBUFFERED=1 ./play.sh --remote --quiet --override_delete --override_rename --model ${LLM_MODEL} "$@"
+PYTHONUNBUFFERED=1 ./play.sh --remote --quiet --override_delete --override_rename --model ${LLM_MODEL_UID} "$@"
