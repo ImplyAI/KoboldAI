@@ -38,11 +38,12 @@ RUN \
         tar -xvj bin/micromamba
 
 COPY ./install_requirements.sh ./
+COPY ./environments/ ./environments/
 RUN chmod +x ./install_requirements.sh && \
-    ./install_requirements.sh
+    ./install_requirements.sh cuda
 
-COPY ./docker-standalone/docker-helper.sh ./
-RUN chmod +x ./docker-helper.sh
+COPY ./docker-standalone/docker-helper.sh ./docker-standalone/
+RUN chmod +x ./docker-standalone/docker-helper.sh
 
 CMD /opt/koboldai/docker-helper.sh
 
