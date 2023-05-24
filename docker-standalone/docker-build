@@ -14,6 +14,7 @@ cd "${working_dir_path}/.."
 
 docker build \
   --file "./docker-standalone/Dockerfile" \
+  --cache-from "${koboldai_image_name}:latest" \
   --tag "${koboldai_image_name}:${koboldai_image_tag}" \
   --tag "${koboldai_image_name}:latest" \
   .
