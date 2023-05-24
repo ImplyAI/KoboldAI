@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: set the below, unless they will break the existing code?
-#set -o errexit
-#set -o nounset
-
-cd /opt/koboldai
-
-if [[ -n update ]]; then
-  ./install_requirements.sh cuda
-fi
-
 if [[ ! -v KOBOLDAI_DATADIR ]]; then
   mkdir /content
   KOBOLDAI_DATADIR=/content
