@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o noclobber
+set -o pipefail
+
+# NOTE: Running the container directly and not through Docker Compose, because Docker Compose only supports `--gpus all`
+#       when running in Swarm mode.
+
+llm_model="${1}"
+koboldai_container_name="${2:-koboldai}"
+
+working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
+
+koboldai_data_local_dir_name='koboldai-data'
+echo "[INFO] Creating the ${koboldai_data_local_dir_name} directory, if it doesn't  exist already..."
+mkdir -p "${working_dir_path}/${koboldai_data_local_dir_name}"
+
+echo "[INFO] Starting ${koboldai_container_name} Docker container in detached mode..."
+export KOBOLDAI_DATADIR='/content'
+export KOBOLDAI_MODELDIR="${KOBOLDAI_DATADIR}"
+docker run \
+  --detach \
+  --name "${koboldai_container_name}" \
+  --gpus all \
+  --env KOBOLDAI_DATADIR \
+  --env KOBOLDAI_MODELDIR \
+  --env LLM_MODEL="${llm_model}" \
+  --volume "$(pwd)/${koboldai_data_local_dir_name}:${KOBOLDAI_DATADIR}" \
+  "$@"
+echo "[INFO] Launched ${koboldai_container_name} Docker container in detached mode."
+
+koboldai_container_id=$(docker ps --quiet --filter="name=${koboldai_container_name}")
+koboldai_container_log_path=$(docker inspect --format='{{ .LogPath }}' "${koboldai_container_id}")
+koboldai_endpoint=$(
+  sudo sed -n 's|.*KoboldAI has finished loading and is available at the following link for UI 1: \([^\\]*\).*|\1|p' \
+    "${koboldai_container_log_path}" | \
+  head -n 1
+)
+echo "[INFO] ${koboldai_container_name} entrypoint: ${koboldai_endpoint}"
+echo "${koboldai_endpoint}"
