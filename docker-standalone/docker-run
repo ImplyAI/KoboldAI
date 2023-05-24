@@ -38,6 +38,7 @@ docker run \
   --env LLM_MODEL_UID="${llm_model_uid}" \
   --volume "${working_dir_path}/${koboldai_data_local_dir_name}:${KOBOLDAI_DATADIR}" \
   --volume "${working_dir_path}/${koboldai_models_local_dir_name}:${KOBOLDAI_MODELDIR}" \
+  --publish 5000:5000 \
   "${koboldai_image_name}:${koboldai_image_tag}" \
   "$@"
 echo "[INFO] Launched ${koboldai_container_name} Docker container in detached mode."
