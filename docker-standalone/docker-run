@@ -8,6 +8,25 @@ set -o pipefail
 # NOTE: Running the container directly and not through Docker Compose, because Docker Compose only supports `--gpus all`
 #       when running in Swarm mode.
 
+slugify_string() {
+    # Convert string to lowercase
+    slug=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+
+    # Replace spaces with hyphens
+    slug=$(echo "$slug" | tr ' ' '-')
+
+    # Remove special characters and keep only alphanumeric and hyphens
+    slug=$(echo "$slug" | sed 's/[^a-z0-9-]//g')
+
+    # Remove consecutive hyphens
+    slug=$(echo "$slug" | sed 's/-\+/-/g')
+
+    # Remove leading/trailing hyphens
+    slug=$(echo "$slug" | sed 's/^-//; s/-$//')
+
+    echo "$slug"
+}
+
 llm_model_uid="${1}"
 published_port="${2:-5000}"
 shift
@@ -26,7 +45,7 @@ koboldai_models_local_dir_name='koboldai-models'
 echo "[INFO] Creating the ${koboldai_models_local_dir_name} directory, if it doesn't  exist already..."
 mkdir -p "${working_dir_path}/${koboldai_models_local_dir_name}"
 
-koboldai_container_name='koboldai'
+koboldai_container_name="koboldai-$(slugify_string ${llm_model_uid})"
 echo "[INFO] Starting ${koboldai_container_name} Docker container in detached mode..."
 export KOBOLDAI_DATADIR='/content'
 export KOBOLDAI_MODELDIR='/models'
