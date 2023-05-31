@@ -30,6 +30,7 @@ slugify_string() {
 llm_model_uid="${1}"
 published_port="${2:-5000}"
 shift
+shift
 
 working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
