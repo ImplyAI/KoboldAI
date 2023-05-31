@@ -9,6 +9,7 @@ set -o pipefail
 #       when running in Swarm mode.
 
 llm_model_uid="${1}"
+published_port="${2:-5000}"
 shift
 
 working_dir_path="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
@@ -38,7 +39,7 @@ docker run \
   --env LLM_MODEL_UID="${llm_model_uid}" \
   --volume "${working_dir_path}/${koboldai_data_local_dir_name}:${KOBOLDAI_DATADIR}" \
   --volume "${working_dir_path}/${koboldai_models_local_dir_name}:${KOBOLDAI_MODELDIR}" \
-  --publish 5000:5000 \
+  --publish "${published_port}:5000" \
   "${koboldai_image_name}:latest" \
   "$@"
 echo "[INFO] Launched ${koboldai_container_name} Docker container in detached mode."
